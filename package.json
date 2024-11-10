@@ -1,0 +1,25 @@
+{
+    "name": "playwright-ts-automationpractice",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "playwright test",
+        "test:ui": "playwright test --ui",
+        "test:report": "playwright show-report",
+        "test:headful": "playwright test --headed",
+        "test:webkit": "playwright test --browser webkit",
+        "test:firefox": "playwright test --browser firefox",
+        "test:headful:firefox": "playwright test --headed --browser firefox",
+        "test:headful:webkit": "playwright test --headed --browser webkit"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@playwright/test": "^1.48.2",
+        "@types/node": "^22.9.0",
+        "dotenv": "^16.4.5"
+    }
+}
