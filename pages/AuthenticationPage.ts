@@ -1,29 +1,24 @@
 import { Page, expect } from '@playwright/test';
+import { text } from 'stream/consumers';
 
 const SELECTORS = {
     emailInput: '#email',
     passwordInput: '#passwd',
     submitButton: '#SubmitLogin',
-    errorMessage: 'text=Invalid email address.'
+    errorMessage: 'text=Invalid email address.',
+    textRegistered: 'Already registered?',
+    textAuthenticationFailed: 'Authentication failed.',
+    textMyAccount: 'My account',
+    textMyCustomerAccount: 'View my customer account',
+    textInvalidEmail: 'Invalid email address.',
+    pageHeading: '.page-heading'
 };
 
-export class LoginPage {
+export class AuthenticationPage {
     readonly page: Page;
 
     constructor(page: Page) {
         this.page = page;
-    }
-
-    // Método para navegar até a página de login
-    async goto() {
-        await this.page.goto('/index.php');
-    }
-
-    // Método para clicar no link de login
-    async clickButtonLogin() {
-        await this.page.getByRole('link', { name: 'Sign in' }).click();
-        await expect(this.page).toHaveURL("/index.php?controller=authentication&back=my-account");
-        await expect(this.page.getByText('Already registered?')).toBeVisible();
     }
 
     // Método para preencher o formulário de login
@@ -39,25 +34,23 @@ export class LoginPage {
 
     // Método para realizar login com email e senha
     async login(email: string, password: string) {
-        await this.goto();
-        await this.clickButtonLogin();
         await this.fillLoginForm(email, password);
         await this.submitLogin();
     }
 
     // Método para verificar se o login foi realizado com sucesso
     async expectAuthenticationSuccess() {
-        await expect(this.page.locator('.page-heading')).toHaveText('My account');
-        await expect(this.page.getByTitle('View my customer account')).toBeVisible();
+        await expect(this.page.locator(SELECTORS.pageHeading)).toHaveText(SELECTORS.textMyAccount);
+        await expect(this.page.getByTitle(SELECTORS.textMyCustomerAccount)).toBeVisible();
     }
 
     // Método para verificar se a mensagem de erro é exibida
     async expectAuthenticationFailed() {
-        await expect(this.page.getByText('Authentication failed.')).toBeVisible();
+        await expect(this.page.getByText(SELECTORS.textAuthenticationFailed)).toBeVisible();
     }
 
     // Metodo para verificar se a mensagem de erro de email inválido é exibida
     async expectInvalidEmail() {
-        await expect(this.page.getByText('Invalid email address.')).toBeVisible();
+        await expect(this.page.getByText(SELECTORS.textInvalidEmail)).toBeVisible();
     }
 }
