@@ -1,17 +1,19 @@
 import { Page, expect } from '@playwright/test';
-import { text } from 'stream/consumers';
+import { CreateAccountPage } from './CreateAccountPage';
 
 const SELECTORS = {
     emailInput: '#email',
     passwordInput: '#passwd',
     submitButton: '#SubmitLogin',
+    submitButtonCreateAccount: '#SubmitCreate',
     errorMessage: 'text=Invalid email address.',
     textRegistered: 'Already registered?',
     textAuthenticationFailed: 'Authentication failed.',
     textMyAccount: 'My account',
     textMyCustomerAccount: 'View my customer account',
     textInvalidEmail: 'Invalid email address.',
-    pageHeading: '.page-heading'
+    pageHeading: '.page-heading',
+    emailCreateAccount: '#email_create'
 };
 
 export class AuthenticationPage {
@@ -52,5 +54,16 @@ export class AuthenticationPage {
     // Metodo para verificar se a mensagem de erro de email inválido é exibida
     async expectInvalidEmail() {
         await expect(this.page.getByText(SELECTORS.textInvalidEmail)).toBeVisible();
+    }
+
+    // Método para preencher email para cadastrar nova conta
+    async fillEmailCreateAccount(email: string) {
+        await this.page.fill(SELECTORS.emailCreateAccount, email);
+    }
+
+    // Método para submeter formulário para criar nova conta
+    async submitCreateAccount() {
+        await this.page.click(SELECTORS.submitButtonCreateAccount);
+        return new CreateAccountPage(this.page);
     }
 }
